@@ -1,35 +1,83 @@
-﻿#include <iostream>
-#include <vector>
-
-//определяем функцию которая принимает вектор b по ссылке, а также индексы m,n, и p
-void swapSegments(std::vector<int>& b, int m, int n, int p) {
-    //создаем вектор temp, который хранит элементы сегмента [n,p] из вектора b
-    std::vector<int> temp(b.begin() + n, b.begin() + p);
-    int j = p - n;
-    //сдвигаем элементы [m, m+j) на j позиций вправо. Чтобы освободить место для вставки сегмента temp 
-    for (int i = m + j - 1; i >= m; i--) {
-        b[i + j] = b[i];  
-    }
-   // элементы из temp копируются обратно в b, начиная с индекса m и до индекса m + j - 1. Это делается для вставки сегмента temp вместо сегмента[m, m + j)
-    for (int i = m; i < m + j; i++) {
-        b[i] = temp[i - m];
-    }
-}
+﻿#include <string>
+#include <iostream>
+using namespace std;
 
 int main() {
-    //создается вектор b с исходными значениями
-    std::vector<int> b = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-    //определяются значения индексов m, n и p.
-    int m = 1;
-    int n = 4;
-    int p = 7;
-    //Функция swapSegments вызывается с этими значениями
-    swapSegments(b, m, n, p);
-  //результат выводится на экран с помощью цикла for.
-    for (int num : b) {
-        std::cout << num << " ";
+    string s;
+    cin >> s;
+    int m, i, j;
+    cin >> m >> i >> j;
+    if (i % 2 != 0 && j % 2 != 0) {
+        int l = m + i;
+        char temp = s[l];
+        for (int k = 0; k < i + j - 1; k++) {
+            int r = l - j;
+            if (r >= m) s[l] = s[r];
+            else {
+                r = r - m;
+                r = m + i + j + r;
+                s[l] = s[r];
+            }
+            l = r;
+            //cout << s << endl; // проверка
+        }
+        s[l] = temp;
     }
-    std::cout << std::endl;  // 1 5 6 7 2 3 4 8 9
+    else if (i % 2 == 0 && j % 2 == 0) {
+        int l = m + i;
+        char temp = s[l];
+        for (int k = 0; k < i + j - 2; k++) {
+            int m = l - j;
+            if (m > m) s[l] = s[m];
+            else if (m < m) {
+                m = m - m;
+                m = m + i + j + m;
+                s[l] = s[m];
+            }
+            else {
+                s[l] = s[m];
+                s[m] = temp;
+                temp = s[m + 1];
+                m++;
+            }
+            l = m;
+            //cout << s << endl; // проверка
+        }
+        s[l] = temp;
+    }
+    else if (j % 2 == 0) {
+        int l = m + i;
+        char temp = s[l];
+        for (int k = 0; k < i + j - 1; k++) {
+            int m = l - j;
+            if (m >= m) s[l] = s[m];
+            else {
+                m = m - m;
+                m = m + i + j + m;
+                s[l] = s[m];
+            }
+            l = m;
+            //cout << s << endl; // проверка
+        }
+        s[l] = temp;
+    }
+    else {
+        int l = m + i - 1;
+        char temp = s[l];
+        for (int k = 0; k < i + j - 1; k++) {
+            int m = l - j;
+            if (m >= m) s[l] = s[m];
+            else {
+                m = m - m;
+                m = m + i + j + m;
+                s[l] = s[m];
+            }
+            l = m;
+            //cout << s << endl; // проверка
+        }
+        s[l] = temp;
+    }
+    cout << endl << s << endl;
 
     return 0;
 }
